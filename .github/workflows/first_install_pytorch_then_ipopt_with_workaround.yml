@@ -1,0 +1,53 @@
+name: first_install_pytorch_then_ipopt_with_workaround
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  first_install_pytorch_then_ipopt_with_workaround:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 1️⃣ Install Miniforge with conda‑forge as the top channel
+    - name: Set up Miniforge
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-activate-base: false
+        activate-environment: testenv
+        channels: conda-forge
+        conda-remove-defaults: true
+        miniforge-variant: Miniforge3   # pure conda, no mamba
+        miniforge-version: latest
+
+    # 2️⃣ Install PyTorch
+    - name: Install PyTorch
+      shell: bash -l {0}
+      run: |
+        conda install -y pytorch
+
+    # 3️⃣ Verify PyTorch import
+    - name: Check PyTorch import
+      shell: bash -l {0}
+      run: |
+        python -c "import torch, sys; print('Torch OK – version', torch.__version__)"
+
+    # 4️⃣ Install Ipopt
+    - name: Install Ipopt
+      shell: bash -l {0}
+      run: |
+        conda install -y ipopt
+
+    # Re-install intel-openmp
+    - name: Install Ipopt
+      shell: bash -l {0}
+      run: |
+        conda install -y intel-openmp --force-reinstall
+
+    # 5️⃣ Verify PyTorch still imports after Ipopt and reinstalling intel-openmp
+    - name: Re‑check PyTorch after Ipopt
+      shell: bash -l {0}
+      run: |
+        python -c "import torch, sys; print('Torch still OK – version', torch.__version__)"
