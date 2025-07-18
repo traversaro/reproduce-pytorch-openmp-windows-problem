@@ -41,7 +41,7 @@ jobs:
         conda install -y ipopt
 
     # Re-install intel-openmp
-    - name: Install Ipopt
+    - name: Reinstall intel-openmp as a workaround
       shell: bash -l {0}
       run: |
         conda install -y intel-openmp --force-reinstall
