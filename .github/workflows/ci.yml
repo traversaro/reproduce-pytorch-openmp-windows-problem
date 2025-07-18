@@ -15,7 +15,6 @@ jobs:
     - name: Set up Miniforge
       uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: "3.11"
         auto-activate-base: false
         activate-environment: testenv
         channels: conda-forge
@@ -26,6 +25,7 @@ jobs:
     - name: Install PyTorch
       shell: bash -l {0}
       run: |
+        conda config --remove channels defaults
         conda install -y pytorch
 
     # 3️⃣ Verify PyTorch import
