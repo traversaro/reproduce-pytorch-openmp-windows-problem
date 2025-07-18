@@ -1,11 +1,11 @@
-name: conda‑pytorch‑ipopt‑windows
+name: first_install_pytorch_then_ipopt
 
 on:
   push:
     branches: [main]
 
 jobs:
-  test_torch_ipopt:
+  first_install_pytorch_then_ipopt:
     runs-on: windows-latest
 
     steps:
