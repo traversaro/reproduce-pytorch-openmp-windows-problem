@@ -1,0 +1,35 @@
+name: install_pytorch_and_ipopt_together
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  install_pytorch_and_ipopt_together:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 1️⃣ Install Miniforge with conda‑forge as the top channel
+    - name: Set up Miniforge
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-activate-base: false
+        activate-environment: testenv
+        channels: conda-forge
+        conda-remove-defaults: true
+        miniforge-variant: Miniforge3
+        miniforge-version: latest
+
+    # 2️⃣ Install PyTorch
+    - name: Install PyTorch
+      shell: bash -l {0}
+      run: |
+        conda install -y pytorch ipopt
+
+    # 3️⃣ Verify PyTorch import
+    - name: Check PyTorch import
+      shell: bash -l {0}
+      run: |
+        python -c "import torch, sys; print('Torch OK – version', torch.__version__)"
